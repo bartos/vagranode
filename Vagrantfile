@@ -50,15 +50,16 @@ Vagrant.configure("2") do |config|
 #      m.vm.network "forwarded_port", guest: 8080, host:8080
 #      sync directories
       
+      box[:sync].each do |sync|
+        m.vm.synced_folder sync[:host], sync[:guest]
+      end
   
-    end
-    box[:sync].each do |sync|
-      config.vm.synced_folder sync[:host], sync[:guest]
+      if box.key?(:provision)
+        m.vm.provision "shell", inline: $script
+      end
+
     end
 
-    if box.key?(:provision)
-      config.vm.provision "shell", inline: $script
-    end
 
 
 
