@@ -4,7 +4,7 @@
 $script = <<SCRIPT
 echo I am provisioning...
 date > /etc/vagrant_provisioned_at
-echo this is a newly provisioned element, got it >> /etc/vagrant_provisioned_at
+echo this is a newly provisioned element, just for test >> /etc/vagrant_provisioned_at
 SCRIPT
 
 boxes = [
