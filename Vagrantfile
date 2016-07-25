@@ -43,7 +43,7 @@ Vagrant.configure("2") do |config|
       m.vm.hostname=box[:name]
       m.vm.provider "virtualbox" do |v|
         v.memory=512
-        v.cpus=1  #notsure if possible
+        v.cpus=1  #0.7 seems impossible Oo_
       end
 
       m.vm.network "private_network", ip: box[:ip]
