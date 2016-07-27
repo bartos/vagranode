@@ -12,26 +12,33 @@ boxes = [
     :name => 'master',
     :ip   => '10.0.9.111',
     :sync => [
+    #  {
+    #    :host => "salt/",
+    #    :guest => "/srv/salt"
+    #  },
+    ],
+    :provision  => [
       {
-        :host => "salt/",
-        :guest => "/srv/salt"
+        :name => "install ansible",
+        :type => "shell",
+        :path => "scripts/install_ansible.sh"
+      },
+      {
+        :name => "mark provision to file",
+        :type => "shell",
+        :path => "scripts/markup_provision.sh"
       },
     ],
-    :provision => {
-      :type => "salt",
-    },
-
-    
   },
   {
     :name => 'slave1',
     :ip   => '10.0.9.112',
-    :sync => {}
+    :sync => []
   },
   {
     :name => 'slave2',
     :ip   => '10.0.9.113',
-    :sync => {}
+    :sync => []
   },
 ]
 
@@ -53,11 +60,26 @@ Vagrant.configure("2") do |config|
       box[:sync].each do |sync|
         m.vm.synced_folder sync[:host], sync[:guest]
       end
-  
+ 
+ # PROVISIONING
+ #
       if box.key?(:provision)
-        m.vm.provision "shell", inline: $script
+        puts "PROVISION DEFINED"
+        box[:provision].each do |prov|
+          puts prov[:name]
+          
+          if prov[:type] == "shell"
+            m.vm.provision prov[:type], path: prov[:path]            
+          end
+            
+        end
       end
 
+ #     if box.key?(:provision)
+ #       m.vm.provision "shell", inline: $script
+ #     end
+ # PROVISIONING END...
+ #
     end
 
 
